@@ -7,7 +7,7 @@ const placeSchema = new Schema({
     images: [{ type: String, required: true }],
     price: { type: Number, required: true },
     location: { type: String, required: true },
-    category: { type: String, enum: ['Beach', 'Mountain', 'City', 'Adventure', 'Cultural'], required: true },
+    category: { type: String, enum: ['Beach', 'Mountain', 'City', 'Adventure', 'Nature', 'Lake', 'Forest', 'Hill', 'Island', 'Wetland', 'Cultural', 'International'], required: true },
     duration: { type: String, required: true },
     availableDates: [{ type: Date, required: true }],
     rating: { type: Number, default: 0 },

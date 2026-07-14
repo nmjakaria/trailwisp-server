@@ -17,8 +17,8 @@ export async function createBooking(req: Request, res: Response) {
     const booking = await Booking.create({
         userId: req.user!.id, placeId, seats, departureDate, departureTime, contactInfo, status: 'pending',
     });
-    place.bookingsCount += 1;
-    await place.save();
+
+    await Place.findByIdAndUpdate(placeId, { $inc: { bookingsCount: 1 } });
 
     res.status(201).json(booking);
 }
