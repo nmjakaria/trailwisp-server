@@ -52,3 +52,7 @@ export async function toggleFeatureStory(req: Request, res: Response) {
     await story.save();
     res.json(story);
 }
+export async function getMyStories(req: Request, res: Response) {
+    const stories = await Story.find({ userId: req.user!.id }).sort({ createdAt: -1 });
+    res.json(stories);
+}

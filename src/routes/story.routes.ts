@@ -7,6 +7,7 @@ import { requireAdmin, requireNotBlocked } from '../middlewares/role.middleware.
 const router = Router();
 
 router.get('/', asyncHandler(getStories));
+router.get('/mine', verifyJWT, asyncHandler(getStoryById));
 router.get('/:id', asyncHandler(getStoryById));
 router.post('/', verifyJWT, requireNotBlocked, asyncHandler(createStory));
 router.put('/:id', verifyJWT, requireNotBlocked, asyncHandler(updateStory));

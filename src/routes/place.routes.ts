@@ -9,7 +9,7 @@ const router = Router();
 router.get('/', asyncHandler(getPlaces));
 router.get('/:id', asyncHandler(getPlaceById));
 router.post('/', verifyJWT, requireAdmin, asyncHandler(createPlace));
-router.put('/:id', verifyJWT, requireAdmin, asyncHandler(updatePlace));
+router.patch('/:id', verifyJWT, requireAdmin, asyncHandler(updatePlace));
 router.delete('/:id', verifyJWT, requireAdmin, asyncHandler(deletePlace));
 router.patch('/:id/feature', verifyJWT, requireAdmin, asyncHandler(toggleFeaturePlace));
 

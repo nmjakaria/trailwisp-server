@@ -1,9 +1,5 @@
 import type { Request, Response, NextFunction } from 'express';
-import { createRemoteJWKSet, jwtVerify } from 'jose';
-
-const JWKS = createRemoteJWKSet(
-    new URL(`${process.env.BETTER_AUTH_URL}/api/auth/jwks`)
-);
+import { createRemoteJWKSet, jwtVerify } from 'jose-cjs';
 
 export interface AuthUser {
     id: string;
@@ -20,6 +16,19 @@ declare global {
     }
 }
 
+let jwks: ReturnType<typeof createRemoteJWKSet> | null = null;
+
+function getJWKS() {
+    if (!jwks) {
+        const authUrl = process.env.BETTER_AUTH_URL;
+        if (!authUrl) {
+            throw new Error('BETTER_AUTH_URL is not defined in .env');
+        }
+        jwks = createRemoteJWKSet(new URL(`${authUrl}/api/auth/jwks`));
+    }
+    return jwks;
+}
+
 export async function verifyJWT(req: Request, res: Response, next: NextFunction) {
     const authHeader = req.headers.authorization;
     if (!authHeader?.startsWith('Bearer ')) {
@@ -27,9 +36,10 @@ export async function verifyJWT(req: Request, res: Response, next: NextFunction)
     }
     const token = authHeader.split(' ')[1];
     try {
-        const { payload } = await jwtVerify(token as string, JWKS);
+        const { payload } = await jwtVerify(token as string, getJWKS());
+
         req.user = {
-            id: payload.sub as string,
+            id: (payload.id || payload.sub) as string,
             email: payload.email as string,
             role: (payload as any).role || 'user',
             isBlocked: Boolean((payload as any).isBlocked),

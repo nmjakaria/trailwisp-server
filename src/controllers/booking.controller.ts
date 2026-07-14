@@ -1,4 +1,4 @@
-/import type { Request, Response } from 'express';
+import type { Request, Response } from 'express';
 import { Booking } from '../models/booking.model.js';
 import { Place } from '../models/place.model.js';
 
