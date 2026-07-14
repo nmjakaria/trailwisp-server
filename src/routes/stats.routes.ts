@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { getAllUsers, toggleBlockUser } from '../controllers/user.controller.js';
+import { getPublicStats, getAdminStats } from '../controllers/stats.controller.js';
 import { asyncHandler } from '../utils/asyncHandler.js';
 import { verifyJWT } from '../middlewares/auth.middleware.js';
 import { requireAdmin } from '../middlewares/role.middleware.js';
 
 const router = Router();
 
-router.get('/', verifyJWT, requireAdmin, asyncHandler(getAllUsers));
-router.put('/:id/block', verifyJWT, requireAdmin, asyncHandler(toggleBlockUser));
+router.get('/public', asyncHandler(getPublicStats));
+router.get('/admin', verifyJWT, requireAdmin, asyncHandler(getAdminStats));
 
 export default router;
