@@ -11,6 +11,8 @@ const bookingSchema = new Schema({
         phone: { type: String, required: true },
         email: { type: String, required: true },
     },
+    pricePerSeat: { type: Number, required: true },
+    totalPrice: { type: Number, required: true },
     status: { type: String, enum: ['pending', 'confirmed', 'cancelled'], default: 'pending' },
     adminConfirmedTime: { type: String },
 }, { timestamps: true });

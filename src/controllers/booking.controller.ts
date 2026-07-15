@@ -13,9 +13,11 @@ export async function createBooking(req: Request, res: Response) {
     if (!isValidDate) {
         return res.status(400).json({ message: 'Selected date is not available for this place' });
     }
+    const pricePerSeat = place.price;
+    const totalPrice = pricePerSeat * seats;
 
     const booking = await Booking.create({
-        userId: req.user!.id, placeId, seats, departureDate, departureTime, contactInfo, status: 'pending',
+        userId: req.user!.id, placeId, seats, departureDate, departureTime, contactInfo, pricePerSeat, totalPrice, status: 'pending',
     });
 
     await Place.findByIdAndUpdate(placeId, { $inc: { bookingsCount: 1 } });

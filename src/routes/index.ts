@@ -19,7 +19,7 @@ router.use('/wishlist', wishlistRoutes);
 router.use('/likes', likeRoutes);
 router.use('/comments', commentRoutes);
 router.use('/news', newsRoutes);
-router.use('/users', userRoutes);
+router.use('/admin/users', userRoutes);
 router.use('/stats', statsRoutes);
 
 export default router;

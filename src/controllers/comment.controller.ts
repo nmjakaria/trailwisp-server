@@ -7,6 +7,32 @@ export async function createComment(req: Request, res: Response) {
     res.status(201).json(comment);
 }
 
+export async function getAllComments(req: Request, res: Response) {
+    const { targetType, page = '1', limit = '20' } = req.query;
+
+    const filter: Record<string, any> = {};
+    if (targetType) filter.targetType = targetType;
+
+    const pageNum = Math.max(1, Number(page));
+    const limitNum = Math.max(1, Number(limit));
+
+    const [comments, total] = await Promise.all([
+        Comment.find(filter)
+            .populate('userId', 'name email image')
+            .sort({ createdAt: -1 })
+            .skip((pageNum - 1) * limitNum)
+            .limit(limitNum),
+        Comment.countDocuments(filter),
+    ]);
+
+    res.json({
+        data: comments,
+        total,
+        page: pageNum,
+        totalPages: Math.ceil(total / limitNum),
+    });
+}
+
 export async function getCommentsForTarget(req: Request, res: Response) {
     const comments = await Comment.find({ targetId: req.params.targetId })
         .populate('userId', 'name image')
