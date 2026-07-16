@@ -27,6 +27,7 @@ app.get('/', (req: Request, res: Response) => {
     res.send('Server is running fine');
 });
 
+
 app.use('/api', routes);
 app.use(notFound);
 app.use(errorHandler);
