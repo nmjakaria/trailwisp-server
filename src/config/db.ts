@@ -1,13 +1,19 @@
 import mongoose from 'mongoose';
 
+let isConnected = false;
+
 export async function connectDB(): Promise<void> {
+    if (isConnected) return;
+
     const uri = process.env.MONGO_DB_URI;
     if (!uri) throw new Error('MONGO_DB_URI is not defined in .env');
+
     try {
-        await mongoose.connect(uri, { dbName: process.env.DB_NAME || 'trailwisp_db' });
-        console.log('[db]: MongoDB connected');
+        const db = await mongoose.connect(uri, { dbName: process.env.DB_NAME || 'trailwisp_db' });
+        isConnected = db.connections[0].readyState === 1;
+        // console.log('[db]: MongoDB connected');
     } catch (error) {
         console.error('[db]: Connection failed', error);
-        process.exit(1);
+        throw error;
     }
 }
