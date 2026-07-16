@@ -30,7 +30,7 @@ export async function getAllComments(req: Request, res: Response) {
 }
 
 export async function getCommentsForTarget(req: Request, res: Response) {
-    const filter: FilterQuery<IComment> = { targetId: req.params.targetId as any };  // ← ফিক্স
+    const filter = { targetId: req.params.targetId as any };  // ← ফিক্স
     const comments = await Comment.find(filter)
         .populate('userId', 'name image')
         .sort({ createdAt: -1 });
